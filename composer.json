@@ -1,6 +1,6 @@
 {
     "name": "bundle-bus/eventhub-craft",
-    "description": "Package to manage events",
+    "description": "CQRS / DDD bus package built on Symfony Messenger",
     "type": "library",
     "license": "MIT",
     "minimum-stability": "stable",
