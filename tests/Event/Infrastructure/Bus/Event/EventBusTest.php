@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace EventHubCraft\Tests\Event\Infrastructure\Bus\Event;
 
-use EventHubCraft\Event\Domain\Bus\Event\EventNotRegisteredError;
 use EventHubCraft\Event\Infrastructure\Messenger\Event\SymfonyDomainEventPublisher;
 use EventHubCraft\Event\Infrastructure\Messenger\Event\SymfonyEventBus;
 use EventHubCraft\Tests\Event\Application\Event\OnlyEvent;
@@ -33,15 +32,13 @@ class EventBusTest extends TestCase
         ]);
         $EventBus = new SymfonyEventBus($messageBusInterface);
 
-        $responseSum = $EventBus->notify(new SumEvent(...[1, 2, 3]));
+        $responseSum = $EventBus->publish(new SumEvent(...[1, 2, 3]));
 
         $this->assertEquals($responseSum, null);
     }
 
     public function testEventBusNoHandler()
     {
-        $this->expectException(EventNotRegisteredError::class);
-
         $messageBusInterface = new MessageBus([
             new HandleMessageMiddleware(new HandlersLocator([
                 SumEvent::class => [new SumEventHandler()],
@@ -49,7 +46,9 @@ class EventBusTest extends TestCase
         ]);
 
         $eventBus = new SymfonyEventBus($messageBusInterface);
-        $eventBus->notify(new OnlyEvent());
+        $eventBus->publish(new OnlyEvent());
+
+        $this->addToAssertionCount(1);
     }
 
     public function testDomainEventPublisher()

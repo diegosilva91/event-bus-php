@@ -6,5 +6,5 @@ namespace EventHubCraft\Event\Domain\Bus\Event;
 
 interface EventBus
 {
-    public function notify(Event $event): void;
+    public function publish(Event $event): void;
 }
